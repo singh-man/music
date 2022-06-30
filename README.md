@@ -2,6 +2,4 @@
 
 ffmpeg must be present in the path
 
-```python3 -u ....music.py```
-
-java based lanterna is work in progress
+java based lanterna project. This is work in progress
