@@ -2,4 +2,10 @@
 
 ffmpeg must be present in the path
 
-java based lanterna project. This is work in progress
+## For python
+
+```python3 -u .........music/src/py/music.py```
+
+## For Java
+
+java based lanterna project. Work in progress.
