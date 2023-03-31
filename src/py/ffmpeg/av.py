@@ -85,6 +85,10 @@ def toGifFfmpeg(inFile, outFile):
     return getFFmpeg() + " -i {} -f gif {}".format(inFile, outFile)
 
 
+def changeContainer(inFile, outFile):
+    return getFFmpeg() + " -i {} -vcodec copy -acodec copy {}".format(inFile, outFile)
+
+
 def ffmpeg_mp3ToM4a_libfdk_aac():
     filesList = getFileOrFolderList("mp3")
     fileMap = {f: replaceFileExt(f, ".m4a") for f in filesList}
@@ -175,6 +179,16 @@ def ffmpeg_toGif():
     fileMap = {f: replaceFileExt(f, ".gif") for f in filesList}
     cmdList = [toGifFfmpeg(f1, f2) for f1, f2 in fileMap.items()]
     return cmdList
+
+
+
+def ffmpeg_changeContainer():
+    filesList = getFileOrFolderList("")
+    container = userInput("Chose conatiner to use", "mkv", "mp4")
+    fileMap = {f: replaceFileExt(f, "."+container) for f in filesList}
+    cmdList = [changeContainer(f1, f2) for f1, f2 in fileMap.items()]
+    return cmdList
+
 
 def rename_filesAsPerModifiedTimestamp():
     """"Mainly to be used to rename the iOS camera image and video filenames."""
