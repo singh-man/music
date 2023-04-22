@@ -1,4 +1,4 @@
-package com.music;
+package com.music.v1;
 
 import java.util.List;
 import java.util.function.Function;

@@ -1,4 +1,4 @@
-package com.music;
+package com.music.v1;
 
 import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;

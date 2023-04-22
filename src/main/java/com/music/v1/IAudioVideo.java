@@ -1,4 +1,4 @@
-package com.music;
+package com.music.v1;
 
 import java.io.File;
 import java.time.Duration;
@@ -6,13 +6,11 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Scanner;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.IntStream;
 
-public interface IAV {
+public interface IAudioVideo {
 
     List<String> videoResolution = Collections.unmodifiableList(Arrays.asList("-1:-1", "426:240", "-1:360", "852:480",
             "-1:720", "-1:1080"));
@@ -21,7 +19,13 @@ public interface IAV {
 
     List<String> videoEncoders = Collections.unmodifiableList(Arrays.asList("libx264", "libx265", "libaom-av1", "libvpx-vp9"));
 
-    String command(String inFile, String outFile);
+    String volume(String in, String out, int db);
+
+    String encode(String in, String out, int crf, String encoder, String resolution);
+
+    String importSubtitles(String in, String out, Subtitles... subtitles);
+
+    String importSubtitles(String in, String out, Subtitles subtitle);
 
     class Subtitles {
         File file;
@@ -46,11 +50,11 @@ public interface IAV {
     /**
      *  call example ===> addDoubleQuotes().apply(str)
      */
-    static Function<String, String> addDoubleQuotes() {
+    default Function<String, String> addDoubleQuotes() {
         return x -> "\"" + x + "\"";
     }
 
-    static String addDoubleQuotes(String str) {
+    default String addDoubleQuotes(String str) {
         addDoubleQuotes().apply(str);
         // OR
         strTransform(str, addDoubleQuotes());
@@ -62,7 +66,7 @@ public interface IAV {
      * call example ===> strTransform("qwer", x -> "\"" + x + "\"");
      * @return "qwer"
      */
-    static String strTransform(String str, Function<String, String> f) {
+    default String strTransform(String str, Function<String, String> f) {
         return f.apply(str);
     }
 
@@ -98,27 +102,5 @@ public interface IAV {
         System.out.print("HH:MM:SS - " + p2 + ":" + p3 + ":" + p1);
         System.out.print("\n");
         return p2 + ":" + p3 + ":" + p1;
-    }
-
-    static BiFunction<String, String, String> volume = (in, out) -> {
-        String db = input("enter db to raise");
-        return String.format("%s -i %s -map 0 -c copy -c:a aac -af \"volume=%sdB\" %s", "ffmpeg", IAV.addDoubleQuotes(in), db, IAV.addDoubleQuotes(out));
-    };
-    static BiFunction<String, String, String> encode = (in, out) -> {
-        String resolution = input("enter resolution", IAV.videoResolution.toArray(new String[IAV.videoResolution.size()]));
-        String encoder = input("enter encoder", IAV.videoEncoders.toArray(new String[IAV.videoEncoders.size()]));
-        String crf = input("enter crf");
-        return String.format("%s -i %s -vf scale=%s -map 0 -c copy -c:v %s -preset medium -crf %s %s",
-                "ffmpeg", IAV.addDoubleQuotes(in), resolution, encoder, crf, IAV.addDoubleQuotes(out));
-    };
-
-    static String input(String x, String... y) {
-        Scanner scan = new Scanner(System.in);
-        if (y != null) {
-            IntStream.range(0, y.length)
-                    .forEach(i -> System.out.println(i + " : " + y[i]));
-        }
-        System.out.println(x + ": \n");
-        return scan.nextLine();
     }
 }

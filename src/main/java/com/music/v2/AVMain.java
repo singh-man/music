@@ -1,9 +1,8 @@
-package com.music;
+package com.music.v2;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -11,27 +10,26 @@ public class AVMain {
 
     public static void main(String[] args) {
 
-        Function<String, String> f1 = s -> s + "a";
-        Function<String, String> f2 = s -> s + "b";
-        Function<String, String> f3 = s -> s + "c";
-        Function<String, String> f4 = s -> s + "z";
+        String inFile = "05.mkv";
+        AVData avData = new AVData(inFile);
 
-        String x = f1
-                .andThen(f2)
-                .andThen(f3)
-                .compose(f4)
-                .apply("x");
+//        Function<AVData, AVData> encode = avData1 -> IAV.encode(avData1);
+//        Function<AVData, AVData> volume = avData1 -> IAV.volume(avData1);
+//
+//        Function<AVData, AVData> avDataAVDataFunction = encode.andThen(volume);
+//        AVData apply = avDataAVDataFunction.apply(avData);
+//
 
-        System.out.println(x);
-
+        Function<AVData, AVData> x;
         OPREnum chose = chose();
+        x = chose.getOpr();
 
-        BiFunction<String, String, String> opr = chose.getOpr();
-
-        for (OPREnum e : OPREnum.values()) {
-            opr.andThen(s -> "");
+        for(;chose != OPREnum.DONE;) {
+            chose = chose();
+            x = x.andThen(chose.getOpr());
         }
-
+        x.apply(avData);
+        avData.getCommands().forEach(System.out::println);
 
     }
 
