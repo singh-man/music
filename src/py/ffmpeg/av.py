@@ -117,7 +117,7 @@ def ffmpeg_mp3ToM4a():
 def ffmpeg_incVolume():
     filesList = getFileOrFolderList("")
     db = input("Provide db: ")
-    fileMap = {f: replaceFileExt(f, "_f_v_" + db + ".mkv") for f in filesList}
+    fileMap = {f: replaceFileExt(f, "_fv" + db + ".mkv") for f in filesList}
     cmdList = [incVolumeFfmpeg(f1, f2, db) for f1, f2 in fileMap.items()]
     return cmdList
 
