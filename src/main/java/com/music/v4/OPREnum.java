@@ -3,8 +3,8 @@ package com.music.v4;
 import java.util.function.Function;
 
 public enum OPREnum {
-    ENCODE(AVMain.encode()),
-    VOLUME(AVMain.volume()),
+    ENCODE(AV_FFMPEG.encode()),
+    VOLUME(AV_FFMPEG.volume()),
 
     DONE(x -> x);
 

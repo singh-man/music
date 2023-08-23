@@ -2,6 +2,8 @@ package com.music.v4;
 
 import java.io.File;
 import java.util.List;
+import java.util.Scanner;
+import java.util.stream.IntStream;
 
 public interface IAV {
 
@@ -30,5 +32,15 @@ public interface IAV {
 
     default String addDoubleQuotes(String text) {
         return "\"" + text + "\"";
+    }
+
+    static String input(String x, String... y) {
+        Scanner scan = new Scanner(System.in);
+        if (y != null) {
+            IntStream.range(0, y.length)
+                    .forEach(i -> System.out.println(i + " : " + y[i]));
+        }
+        System.out.println(x + ": \n");
+        return scan.nextLine();
     }
 }
