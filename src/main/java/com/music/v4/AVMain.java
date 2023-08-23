@@ -1,6 +1,5 @@
 package com.music.v4;
 
-import java.io.File;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -14,8 +13,7 @@ public class AVMain {
         String inFile = "05.mkv";
         AVCommand avData = new AVCommand(inFile);
 
-//        AVCommand apply = encode().andThen(volume()).apply(avData);
-//
+//        AVCommand apply = AV_FFMPEG.encode().andThen(AV_FFMPEG.volume()).apply(avData);
 //        System.out.println(apply.getCmd());
 
         Function<AVCommand, AVCommand> x;
@@ -28,24 +26,6 @@ public class AVMain {
         }
         AVCommand apply = x.apply(avData);
         System.out.println(apply.toString());
-    }
-
-    static Function<AVCommand, AVCommand> encode() {
-        String resolution = input("enter resolution", IAV.videoResolution.toArray(new String[IAV.videoResolution.size()]));
-        IVideoEncoder encoder = FFMPEG_videoEncoder.getEncoder(input("enter encoder", FFMPEG_videoEncoder.allNames()));
-        int crf = Integer.parseInt(input("enter crf"));
-        return avCommand -> {
-            String out = IAV.replaceExtension(new File(avCommand.getOprFile()), "_" + encoder.getName() + ".mkv");
-            return avCommand.newAVCommand(out, new FFMPEG_AudioVideo().encode(new File(avCommand.getOprFile()), resolution, encoder, crf, new File(out)));
-        };
-    }
-
-    static Function<AVCommand, AVCommand> volume() {
-        int db = Integer.parseInt(input("enter db to raise"));
-        return avCommand -> {
-            String out = IAV.replaceExtension(new File(avCommand.getOprFile()), "_v" + db + ".mkv");
-            return avCommand.newAVCommand(out, new FFMPEG_AudioVideo().volume(new File(avCommand.getOprFile()), db, new File(out)));
-        };
     }
 
     static String input(String x, String... y) {
