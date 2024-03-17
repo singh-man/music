@@ -1,7 +1,5 @@
 package com.music.v1;
 
-import org.junit.Test;
-
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -37,7 +35,6 @@ public class AVTerminal {
         AVTerminalViewModel.CmdsR cmdsR = new AVTerminalViewModel.CmdsR(null, file);
         AVTerminalViewModel.CmdsR res1 = u.apply(cmdsR);
         res1.getCmd().forEach(System.out::println);
-
     }
 
     private static Operations chose() {
@@ -78,7 +75,7 @@ public class AVTerminal {
         return e -> e + " " + flag + " " + x;
     }
 
-    @Test
+//    @Test
     public void testClosure() {
         closureInJava_1();
         String x = closureInJava_2("Enter File", "-i")

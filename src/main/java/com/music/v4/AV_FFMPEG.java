@@ -30,21 +30,5 @@ public class AV_FFMPEG implements IAV {
         return command;
     }
 
-    static Function<AVCommand, AVCommand> encode() {
-        String resolution = IAV.input("enter resolution", IAV.videoResolution.toArray(new String[IAV.videoResolution.size()]));
-        IVideoEncoder encoder = FFMPEG_videoEncoder.getEncoder(IAV.input("enter encoder", FFMPEG_videoEncoder.allNames()));
-        int crf = Integer.parseInt(IAV.input("enter crf"));
-        return avCommand -> {
-            String out = IAV.replaceExtension(new File(avCommand.getOprFile()), "_" + encoder.getName() + ".mkv");
-            return avCommand.newAVCommand(out, new AV_FFMPEG().encode(new File(avCommand.getOprFile()), resolution, encoder, crf, new File(out)));
-        };
-    }
 
-    static Function<AVCommand, AVCommand> volume() {
-        int db = Integer.parseInt(IAV.input("enter db to raise"));
-        return avCommand -> {
-            String out = IAV.replaceExtension(new File(avCommand.getOprFile()), "_v" + db + ".mkv");
-            return avCommand.newAVCommand(out, new AV_FFMPEG().volume(new File(avCommand.getOprFile()), db, new File(out)));
-        };
-    }
 }
