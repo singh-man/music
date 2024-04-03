@@ -32,31 +32,67 @@ def getFileOrFolderList(ext):
     return filesList
 
 
-def toM4aWithLibfdkAAC(inFile, outFile):
-    return getFFmpeg() + " -i {} -c:a libfdk_aac -profile:a aac_he_v2 -b:a 48k {}".format(dealWithSpacesInFilePathNames(inFile), dealWithSpacesInFilePathNames(outFile))
+def m4aWithLibfdkAAC():
+        return "-c:a libfdk_aac -profile:a aac_he_v2 -b:a 48k"
 
 
-def toM4aWithBuildInAACFfmpeg(inFile, outFile):
-    return getFFmpeg() + " -i {} -c:a aac -b:a 48k {}".format(dealWithSpacesInFilePathNames(inFile), dealWithSpacesInFilePathNames(outFile))
+def toM4aWithLibfdkAAC(iFile, oFile):
+    return getFFmpeg() + " " + inFile(iFile) + " " + m4aWithLibfdkAAC() + " " + outFile(oFile)
 
 
-def toWavFfmpeg(inFile, outFile):
-    return getFFmpeg() + " -i {} {}".format(dealWithSpacesInFilePathNames(inFile), dealWithSpacesInFilePathNames(outFile))
+def inFile(inFile):
+    return "-i {}".format(dealWithSpacesInFilePathNames(inFile))
 
 
-def incVolumeFfmpeg(inFile, outFile, db):
-    return getFFmpeg() + " -i {} -map 0 -c copy -c:a aac -af \"volume={}dB\" {}".format(dealWithSpacesInFilePathNames(inFile), db, dealWithSpacesInFilePathNames(outFile))
+def outFile(outFile):
+    return "{}".format(dealWithSpacesInFilePathNames(outFile))
 
 
-def encodeFfmpeg(inFile, outFile, encoder, crf, resolution):
+def copyAllStream():
+    return "-map 0 -c copy"
+
+
+def incVolume(db):
+    return "-c:a aac -af \"volume={}db\"".format(db)
+
+
+def incVolumeFfmpeg(iFile, oFile, db):
+    return getFFmpeg() + " " + inFile(iFile) + " " + copyAllStream() + " " + incVolume(db) + " " + outFile(oFile)
+
+
+def m4aWithBuildInAACFfmpeg():
+    return "-c:a aac -b:a 48k"
+
+
+def toM4aWithBuildInAACFfmpeg(iFile, oFile):
+    return getFFmpeg() + " " + inFile(iFile) + " " + m4aWithBuildInAACFfmpeg() + " " + outFile(oFile)
+
+
+def toWavFfmpeg(iFile, oFile):
+    return getFFmpeg() + " " + inFile(iFile) + " " + outFile(oFile)
+
+
+def scaleFfmpeg(resolution):
+    return "-vf scale={}".format(resolution)
+
+
+def to8bitVideo():
+    return "-pix_fmt yuv420p"
+
+
+def encodeFfmpeg(iFile, oFile, encoder, crf, resolution, is8bit):
     #" -i {} -vf scale={} -map 0 -c copy -c:v {} -preset medium -crf {} -c:a aac -strict experimental -b:a 96k {}"
+    to8bit = " " + to8bitVideo() if is8bit == 'y' else ""
     return getFFmpeg() + \
-           " -i {} -vf scale={} -map 0 -c copy -c:v {} -preset medium -crf {} {}" \
-          .format(dealWithSpacesInFilePathNames(inFile), resolution, encoder, crf, dealWithSpacesInFilePathNames(outFile))
+           " " + inFile(iFile) + \
+           " " + "-vf scale={}".format(resolution) + \
+           " " + copyAllStream() +\
+           " " + "-c:v {} -preset medium -crf {}".format(encoder, crf) + \
+           str(to8bit) + " " + outFile(oFile)
 
 
-def concatFfmpeg(inFile, outFile):
-    return getFFmpeg() + " -f concat -i {} -c copy {}".format(inFile, outFile)
+def concatFfmpeg(iFile, oFile):
+    return getFFmpeg() + " -f concat" + " " + inFile(iFile) + " " +  "-c copy" + " " + outFile(oFile)
 
 
 def importFfmpeg(inFile, outFile, srtFile):
@@ -71,26 +107,26 @@ def importFfmpeg(inFile, outFile, srtFile):
     return cmd
 
 
-def cutFfmpeg(inFile, outFile, startTime, endTime):
+def cutFfmpeg(iFile, oFile, startTime, endTime):
     import datetime, time, re
     sh, sm, ss = re.split(":", startTime)
     sSeconds = int(datetime.timedelta(hours=int(sh), minutes=int(sm), seconds=int(ss)).total_seconds())
     eh, em, es = re.split(":", endTime)
     eSeconds = int(datetime.timedelta(hours=int(eh), minutes=int(em), seconds=int(es)).total_seconds())
     duration = time.strftime('%H:%M:%S', time.gmtime(eSeconds - sSeconds))
-    return getFFmpeg() + " -ss {} -i {} -t {} -c copy -avoid_negative_ts make_zero {}".format(startTime, inFile, duration, outFile)
+    return getFFmpeg() + " " + "-ss {}".format(startTime) + " " + inFile(iFile) + " " + "-t {} -c copy -avoid_negative_ts make_zero".format(duration) + " " + outFile(oFile)
 
 
 def toGifFfmpeg(inFile, outFile):
-    return getFFmpeg() + " -i {} -f gif {}".format(inFile, outFile)
+    return getFFmpeg() + " " + inFile(iFile) + " " + "-f gif" + " " + outFile(oFile)
 
 
-def changeContainer(inFile, outFile):
-    return getFFmpeg() + " -i {} -vcodec copy -acodec copy {}".format(inFile, outFile)
+def changeContainer(iFile, oFile):
+    return getFFmpeg() + " " + inFile(iFile) + " " + "-vcodec copy -acodec copy" + " " + outFile(oFile)
 
 
-def extractAudio(inFile, outFile):
-    return getFFmpeg() + " -i {} -vn -acodec copy {}".format(inFile, outFile)
+def extractAudio(iFile, oFile):
+    return getFFmpeg() + " " + inFile(iFile) + " " + "-vn -acodec copy" + " " + outFile(oFile)
 
 
 def ffmpeg_mp3ToM4a_libfdk_aac():
@@ -130,8 +166,9 @@ def ffmpeg_encode():
     encoder = userInput("Provide encoder", "libx264", "libx265", "libaom-av1", "libvpx-vp9")
     crf = userInput("Provide CRF : [0-23-51 least]")
     resolution = userInput("Provide vertical resolution", "-1:-1", "426:240", "-1:360", "852:480", "-1:720", "-1:1080")
+    to8bit = userInput("Should convert to 8 bit video [y/n]")
     fileMap = {f: replaceFileExt(f, "_" + encoder + ".mkv") for f in filesList}
-    cmdList = [encodeFfmpeg(f1, f2, encoder, crf, resolution) for f1, f2 in fileMap.items()]
+    cmdList = [encodeFfmpeg(f1, f2, encoder, crf, resolution, to8bit) for f1, f2 in fileMap.items()]
     return cmdList
 
 
