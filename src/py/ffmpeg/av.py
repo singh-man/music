@@ -92,7 +92,7 @@ def encodeFfmpeg(iFile, oFile, encoder, crf, resolution, is8bit):
 
 
 def concatFfmpeg(iFile, oFile):
-    return getFFmpeg() + " -f concat" + " " + inFile(iFile) + " " +  "-c copy" + " " + outFile(oFile)
+    return ' '.join([getFFmpeg(), "-f concat", inFile(iFile), "-c copy", outFile(oFile)])
 
 
 def importFfmpeg(inFile, outFile, srtFile):
