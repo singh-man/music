@@ -110,7 +110,8 @@ def cutFfmpeg(iFile, oFile, startTime, endTime):
     eh, em, es = re.split(":", endTime)
     eSeconds = int(datetime.timedelta(hours=int(eh), minutes=int(em), seconds=int(es)).total_seconds())
     duration = time.strftime('%H:%M:%S', time.gmtime(eSeconds - sSeconds))
-    return getFFmpeg() + " " + "-ss {}".format(startTime) + " " + inFile(iFile) + " " + "-t {} -c copy -avoid_negative_ts make_zero".format(duration) + " " + outFile(oFile)
+    return ' '.join([getFFmpeg(), "-ss {}".format(startTime), inFile(iFile), 
+                     "-t {} -c copy -avoid_negative_ts make_zero".format(duration), outFile(oFile)])
 
 
 def toGifFfmpeg(inFile, outFile):
