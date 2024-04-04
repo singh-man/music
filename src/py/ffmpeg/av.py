@@ -49,7 +49,7 @@ def m4aWithLibfdkAAC():
 
 
 def toM4aWithLibfdkAAC(iFile, oFile):
-    return getFFmpeg() + " " + inFile(iFile) + " " + m4aWithLibfdkAAC() + " " + outFile(oFile)
+    return ' '.join([getFFmpeg(), inFile(iFile), m4aWithLibfdkAAC(), outFile(oFile)])
 
 
 def incVolume(db):
