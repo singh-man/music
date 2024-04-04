@@ -118,7 +118,7 @@ def toGifFfmpeg(inFile, outFile):
 
 
 def changeContainer(iFile, oFile):
-    return getFFmpeg() + " " + inFile(iFile) + " " + "-vcodec copy -acodec copy" + " " + outFile(oFile)
+    return ' '.join([getFFmpeg(), inFile(iFile), "-vcodec copy -acodec copy", outFile(oFile)])
 
 
 def extractAudio(iFile, oFile):
