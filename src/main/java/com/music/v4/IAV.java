@@ -50,16 +50,16 @@ public interface IAV {
         IVideoEncoder encoder = FFMPEG_videoEncoder.getEncoder(IAV.input("enter encoder", FFMPEG_videoEncoder.allNames()));
         int crf = Integer.parseInt(IAV.input("enter crf"));
         return avCommand -> {
-            String out = IAV.replaceExtension(new File(avCommand.getOprFile()), "_" + encoder.getName() + ".mkv");
-            return avCommand.newAVCommand(out, this.encode(new File(avCommand.getOprFile()), resolution, encoder, crf, new File(out)));
+            String out = IAV.replaceExtension(new File(avCommand.oprFile()), "_" + encoder.getName() + ".mkv");
+            return avCommand.newAVCommand(out, this.encode(new File(avCommand.oprFile()), resolution, encoder, crf, new File(out)));
         };
     }
 
     default Function<AVCommand, AVCommand> volume() {
         int db = Integer.parseInt(IAV.input("enter db to raise"));
         return avCommand -> {
-            String out = IAV.replaceExtension(new File(avCommand.getOprFile()), "_v" + db + ".mkv");
-            return avCommand.newAVCommand(out, this.volume(new File(avCommand.getOprFile()), db, new File(out)));
+            String out = IAV.replaceExtension(new File(avCommand.oprFile()), "_v" + db + ".mkv");
+            return avCommand.newAVCommand(out, this.volume(new File(avCommand.oprFile()), db, new File(out)));
         };
     }
 }
