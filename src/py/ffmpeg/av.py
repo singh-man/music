@@ -32,14 +32,6 @@ def getFileOrFolderList(ext):
     return filesList
 
 
-def m4aWithLibfdkAAC():
-        return "-c:a libfdk_aac -profile:a aac_he_v2 -b:a 48k"
-
-
-def toM4aWithLibfdkAAC(iFile, oFile):
-    return getFFmpeg() + " " + inFile(iFile) + " " + m4aWithLibfdkAAC() + " " + outFile(oFile)
-
-
 def inFile(inFile):
     return "-i {}".format(dealWithSpacesInFilePathNames(inFile))
 
@@ -52,8 +44,16 @@ def copyAllStream():
     return "-map 0 -c copy"
 
 
+def m4aWithLibfdkAAC():
+        return "-c:a libfdk_aac -profile:a aac_he_v2 -b:a 48k"
+
+
+def toM4aWithLibfdkAAC(iFile, oFile):
+    return getFFmpeg() + " " + inFile(iFile) + " " + m4aWithLibfdkAAC() + " " + outFile(oFile)
+
+
 def incVolume(db):
-    return "-c:a aac -af \"volume={}db\"".format(db)
+    return "-c:a aac -af \"volume={}dB\"".format(db)
 
 
 def incVolumeFfmpeg(iFile, oFile, db):
@@ -85,7 +85,7 @@ def encodeFfmpeg(iFile, oFile, encoder, crf, resolution, is8bit):
     to8bit = " " + to8bitVideo() if is8bit == 'y' else ""
     return getFFmpeg() + \
            " " + inFile(iFile) + \
-           " " + "-vf scale={}".format(resolution) + \
+           " " + scaleFfmpeg(resolution) + \
            " " + copyAllStream() +\
            " " + "-c:v {} -preset medium -crf {}".format(encoder, crf) + \
            str(to8bit) + " " + outFile(oFile)
