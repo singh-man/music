@@ -57,7 +57,7 @@ def incVolume(db):
 
 
 def incVolumeFfmpeg(iFile, oFile, db):
-    return getFFmpeg() + " " + inFile(iFile) + " " + copyAllStream() + " " + incVolume(db) + " " + outFile(oFile)
+    return ' '.join([getFFmpeg(), inFile(iFile), copyAllStream(), incVolume(db), outFile(oFile)])
 
 
 def m4aWithBuildInAACFfmpeg():
