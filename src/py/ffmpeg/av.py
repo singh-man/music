@@ -122,7 +122,7 @@ def changeContainer(iFile, oFile):
 
 
 def extractAudio(iFile, oFile):
-    return getFFmpeg() + " " + inFile(iFile) + " " + "-vn -acodec copy" + " " + outFile(oFile)
+    return ' '.join([getFFmpeg(), inFile(iFile), "-vn -acodec copy", outFile(oFile)])
 
 
 def ffmpeg_mp3ToM4a_libfdk_aac():
