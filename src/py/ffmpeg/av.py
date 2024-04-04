@@ -69,7 +69,7 @@ def toM4aWithBuildInAACFfmpeg(iFile, oFile):
 
 
 def toWavFfmpeg(iFile, oFile):
-    return getFFmpeg() + " " + inFile(iFile) + " " + outFile(oFile)
+    return ' '.join([getFFmpeg(), inFile(iFile), outFile(oFile)])
 
 
 def scaleFfmpeg(resolution):
