@@ -114,7 +114,7 @@ def cutFfmpeg(iFile, oFile, startTime, endTime):
 
 
 def toGifFfmpeg(inFile, outFile):
-    return getFFmpeg() + " " + inFile(iFile) + " " + "-f gif" + " " + outFile(oFile)
+    return ' '.join([getFFmpeg(), inFile(iFile), "-f gif", outFile(oFile)])
 
 
 def changeContainer(iFile, oFile):
