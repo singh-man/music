@@ -65,7 +65,7 @@ def m4aWithBuildInAACFfmpeg():
 
 
 def toM4aWithBuildInAACFfmpeg(iFile, oFile):
-    return getFFmpeg() + " " + inFile(iFile) + " " + m4aWithBuildInAACFfmpeg() + " " + outFile(oFile)
+    return ' '.join([getFFmpeg(), inFile(iFile), m4aWithBuildInAACFfmpeg(), outFile(oFile)])
 
 
 def toWavFfmpeg(iFile, oFile):
