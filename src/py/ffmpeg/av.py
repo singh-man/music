@@ -82,13 +82,9 @@ def to8bitVideo():
 
 def encodeFfmpeg(iFile, oFile, encoder, crf, resolution, is8bit):
     #" -i {} -vf scale={} -map 0 -c copy -c:v {} -preset medium -crf {} -c:a aac -strict experimental -b:a 96k {}"
-    to8bit = " " + to8bitVideo() if is8bit == 'y' else ""
-    return getFFmpeg() + \
-           " " + inFile(iFile) + \
-           " " + "-vf scale={}".format(resolution) + \
-           " " + copyAllStream() +\
-           " " + "-c:v {} -preset medium -crf {}".format(encoder, crf) + \
-           str(to8bit) + " " + outFile(oFile)
+    to8bit = to8bitVideo() if is8bit == 'y' else ""
+    return ' '.join([getFFmpeg(), inFile(iFile), "-vf scale={}".format(resolution), copyAllStream(), 
+                    "-c:v {} -preset medium -crf {}".format(encoder, crf), to8bit, outFile(oFile)])
 
 
 def concatFfmpeg(iFile, oFile):
