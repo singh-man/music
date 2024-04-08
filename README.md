@@ -4,7 +4,7 @@ ffmpeg must be present in the path in windows or linux or better use a function 
 
 ### For python
 
-```python3 -u <path to>/music/src/py/music.py```
+```python3 -u <path to>/music/py/music.py```
 
 ### For Java
 
