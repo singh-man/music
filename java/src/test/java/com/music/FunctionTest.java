@@ -25,7 +25,7 @@ public class FunctionTest {
         MyAdder<Integer, Integer> add10 = integer -> integer + 10;
         MyAdder<Integer, Integer> multiply10 = t -> t*10;
 
-        // direct use of funtion
+        // direct use of function
         Assertions.assertEquals(20, add10.operate(10));
 
         // Function -> chaining and applying <- still usees base function!!
