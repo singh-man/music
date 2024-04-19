@@ -5,6 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.function.Function;
 
+/**
+ * Example: how to extend a Function<T, R> and use it.
+ */
 public class FunctionTest {
 
     private interface MyAdder<T, R> extends Function<T, R> {
