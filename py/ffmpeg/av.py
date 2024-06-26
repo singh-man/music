@@ -53,7 +53,7 @@ def copyAllStream():
 
 
 def incVolume(db):
-    return "-c:a aac -af \"volume={}db\"".format(db)
+    return "-c:a aac -af \"volume={}dB\"".format(db)
 
 
 def incVolumeFfmpeg(iFile, oFile, db):
