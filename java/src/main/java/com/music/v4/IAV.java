@@ -2,11 +2,14 @@ package com.music.v4;
 
 import java.io.File;
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public interface IAV {
+
+    String changeContainer(File inFile, String container, File outFile);
 
     String volume(File inFile, int volume, File outFile);
 
@@ -15,6 +18,8 @@ public interface IAV {
     List<String> videoResolution = List.of("-1:-1", "426:240", "-1:360", "852:480", "-1:720", "-1:1080");
 
     List<String> videoFileExtensions = List.of(".mkv", ".avi", ".mp4", ".xvid", ".divx");
+
+    List<String> videoContainer = List.of(".mkv", ".mp4");
 
     class Subtitles {
         File file;
@@ -27,8 +32,7 @@ public interface IAV {
     }
 
     static String replaceExtension(File file, String newExt) {
-        String ext = file.getName().substring(file.getName().lastIndexOf('.'));
-        return file.getName().replace(ext, newExt);
+        return file.getName().substring(0, file.getName().lastIndexOf('.')) + newExt;
     }
 
     default String addDoubleQuotes(String text) {
@@ -57,5 +61,11 @@ public interface IAV {
         int db = Integer.parseInt(IAV.input("enter db to raise"));
         String out = IAV.replaceExtension(new File(avCommand.oprFile()), "_v" + db + ".mkv");
         return avCommand.newAVCommand(out, this.volume(new File(avCommand.oprFile()), db, new File(out)));
+    }
+
+    default AVCommand changeContainer(AVCommand avCommand) {
+        String container = IAV.videoContainer.get(Integer.parseInt(IAV.input("choose container", IAV.videoContainer.toArray(new String[IAV.videoContainer.size()]))));
+        String out = IAV.replaceExtension(new File(avCommand.oprFile()), container);
+        return avCommand.newAVCommand(out, this.changeContainer(new File(avCommand.oprFile()), container, new File(out)));
     }
 }

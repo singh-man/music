@@ -6,6 +6,15 @@ import java.util.function.Function;
 public class AV_FFMPEG implements IAV {
 
     @Override
+    public String changeContainer(File inFile, String container, File outFile) {
+        return String.format(
+                "%s -i %s -vcodec copy -acodec copy %s",
+                "ffmpeg",
+                addDoubleQuotes(inFile.getName()),
+                addDoubleQuotes(outFile.getName()));
+    }
+
+    @Override
     public String volume(File inFile, int volume, File outFile) {
         return String.format(
                 "%s -i %s -map 0 -c copy -c:a aac -af \"volume=%sdB\" %s",
