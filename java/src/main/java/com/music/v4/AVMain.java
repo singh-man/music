@@ -1,5 +1,6 @@
 package com.music.v4;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
@@ -11,16 +12,16 @@ public class AVMain {
     public static void main(String[] args) {
 
         String inFile = "05.mkv";
-        AVCommand avData = new AVCommand(inFile);
+        AVCommand avData = new AVCommand(inFile, new ArrayList<>());
 
 //        AVCommand apply = AV_FFMPEG.encode().andThen(AV_FFMPEG.volume()).apply(avData);
 //        System.out.println(apply.getCmd());
 
         Function<AVCommand, AVCommand> x;
-        OPREnum chose = chose();
+        OPERATIONS chose = chose();
         x = chose.getOpr();
 
-        for (; chose != OPREnum.DONE; ) {
+        for (; chose != OPERATIONS.DONE; ) {
             chose = chose();
             x = x.andThen(chose.getOpr());
         }
@@ -38,15 +39,15 @@ public class AVMain {
         return scan.nextLine();
     }
 
-    private static OPREnum chose() {
-        List<OPREnum> opr = Arrays.asList(OPREnum.values());
+    private static OPERATIONS chose() {
+        List<OPERATIONS> opr = Arrays.asList(OPERATIONS.values());
         IntStream.range(0, opr.size())
                 .forEach(i -> System.out.println(i + " : " + opr.get(i).toString()));
 
         Scanner scanner = new Scanner(System.in);
         System.out.println("Chose Option: ");
         String s = scanner.nextLine();
-        return OPREnum.values()[Integer.parseInt(s)];
+        return OPERATIONS.values()[Integer.parseInt(s)];
     }
 
 }

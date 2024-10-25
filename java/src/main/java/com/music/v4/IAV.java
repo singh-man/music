@@ -2,9 +2,7 @@ package com.music.v4;
 
 import java.io.File;
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
-import java.util.function.Function;
 import java.util.stream.IntStream;
 
 public interface IAV {
@@ -54,18 +52,24 @@ public interface IAV {
         IVideoEncoder encoder = FFMPEG_videoEncoder.getEncoder(IAV.input("enter encoder", FFMPEG_videoEncoder.allNames()));
         int crf = Integer.parseInt(IAV.input("enter crf"));
         String out = IAV.replaceExtension(new File(avCommand.oprFile()), "_" + encoder.getName() + ".mkv");
-        return avCommand.newAVCommand(out, this.encode(new File(avCommand.oprFile()), resolution, encoder, crf, new File(out)));
+        avCommand.setNewInFile(out);
+        avCommand.addCmd(this.encode(new File(avCommand.oprFile()), resolution, encoder, crf, new File(out)));
+        return avCommand;
     }
 
     default AVCommand volume(AVCommand avCommand) {
         int db = Integer.parseInt(IAV.input("enter db to raise"));
         String out = IAV.replaceExtension(new File(avCommand.oprFile()), "_v" + db + ".mkv");
-        return avCommand.newAVCommand(out, this.volume(new File(avCommand.oprFile()), db, new File(out)));
+        avCommand.setNewInFile(out);
+        avCommand.addCmd(this.volume(new File(avCommand.oprFile()), db, new File(out)));
+        return avCommand;
     }
 
     default AVCommand changeContainer(AVCommand avCommand) {
         String container = IAV.videoContainer.get(Integer.parseInt(IAV.input("choose container", IAV.videoContainer.toArray(new String[IAV.videoContainer.size()]))));
         String out = IAV.replaceExtension(new File(avCommand.oprFile()), container);
-        return avCommand.newAVCommand(out, this.changeContainer(new File(avCommand.oprFile()), container, new File(out)));
+        avCommand.setNewInFile(out);
+        avCommand.addCmd(this.changeContainer(new File(avCommand.oprFile()), container, new File(out)));
+        return avCommand;
     }
 }

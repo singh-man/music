@@ -1,19 +1,26 @@
 package com.music.v4;
 
+import java.util.List;
 import java.util.Objects;
 
-public record AVCommand(String oprFile, String cmd) {
+public class AVCommand {
+    private String oprFile;
+    private List<String> cmd;
 
-    public AVCommand(String infile) {
-        this(Objects.requireNonNull(infile), "");
+    public AVCommand(String oprFile, List<String> cmd) {
+        this.oprFile = Objects.requireNonNull(oprFile);
+        this.cmd = Objects.requireNonNull(cmd);
     }
 
-    public AVCommand newAVCommand(String outFile, String addCmd) {
-        String cmd = new StringBuilder()
-                .append(this.cmd)
-                .append("\n")
-                .append(Objects.requireNonNull(addCmd))
-                .toString();
-        return new AVCommand(outFile, cmd);
+    public void addCmd(String cmd) {
+        this.cmd.add(cmd);
+    }
+
+    public void setNewInFile(String inFile) {
+        this.oprFile = inFile;
+    }
+
+    public String oprFile() {
+        return oprFile;
     }
 }
