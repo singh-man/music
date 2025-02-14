@@ -110,7 +110,7 @@ def cutFfmpeg(iFile, oFile, startTime, endTime):
     eh, em, es = splitTime(endTime)
     eSeconds = int(datetime.timedelta(hours=int(eh), minutes=int(em), seconds=int(es)).total_seconds())
     duration = time.strftime('%H:%M:%S', time.gmtime(eSeconds - sSeconds))
-    return ' '.join([getFFmpeg(), "-ss {}".format(startTime), inFile(iFile), 
+    return ' '.join([getFFmpeg(), "-ss {}".format(":".join([sh, sm, ss])), inFile(iFile), 
                      "-t {} -c copy -avoid_negative_ts make_zero".format(duration), outFile(oFile)])
 
 
@@ -184,16 +184,16 @@ def ffmpeg_encode():
 def ffmpeg_cut():
     inFile = input("Enter file: ")
     outFile, ext = inFile.rsplit('.', 1)
-    sTime = input("Enter start time: ")
-    eTime = input("Enter end time: ")
-    cmd = cutFfmpeg(inFile, outFile + "_cut." + ext, sTime, eTime);
+    sTime = input("Enter start time <hh:mm:ss | hhmmss>: ")
+    eTime = input("Enter end time <hh:mm:ss | hhmmss>: ")
+    cmd = cutFfmpeg(inFile, outFile + "_cut." + ext, sTime, eTime)
     return cmd
 
 
 def ffmpeg_concat():
     inFile = input("Enter txt file: ")
     outFile = input("Enter ouput file: ")
-    cmd = concatFfmpeg(inFile, outFile);
+    cmd = concatFfmpeg(inFile, outFile)
     return cmd
 
 
