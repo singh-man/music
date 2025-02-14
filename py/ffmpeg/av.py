@@ -105,13 +105,25 @@ def importFfmpeg(inFile, outFile, srtFile):
 
 def cutFfmpeg(iFile, oFile, startTime, endTime):
     import datetime, time, re
-    sh, sm, ss = re.split(":", startTime)
+    sh, sm, ss = splitTime(startTime)
     sSeconds = int(datetime.timedelta(hours=int(sh), minutes=int(sm), seconds=int(ss)).total_seconds())
-    eh, em, es = re.split(":", endTime)
+    eh, em, es = splitTime(endTime)
     eSeconds = int(datetime.timedelta(hours=int(eh), minutes=int(em), seconds=int(es)).total_seconds())
     duration = time.strftime('%H:%M:%S', time.gmtime(eSeconds - sSeconds))
     return ' '.join([getFFmpeg(), "-ss {}".format(startTime), inFile(iFile), 
                      "-t {} -c copy -avoid_negative_ts make_zero".format(duration), outFile(oFile)])
+
+
+def splitTime(time_):
+    """
+    If time contains :, it splits by :
+
+    else it splits by group of 2 characters
+    """
+    import re
+    if ":" in time_:
+        return re.split(":", time_)
+    return re.findall('..?', time_)
 
 
 def toGifFfmpeg(inFile, outFile):
