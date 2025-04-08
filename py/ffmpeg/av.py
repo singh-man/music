@@ -126,7 +126,7 @@ def splitTime(time_):
     return re.findall('..?', time_)
 
 
-def toGifFfmpeg(inFile, outFile):
+def toGifFfmpeg(iFile, oFile):
     return ' '.join([getFFmpeg(), inFile(iFile), "-f gif", outFile(oFile)])
 
 
@@ -136,6 +136,13 @@ def changeContainer(iFile, oFile):
 
 def extractAudio(iFile, oFile):
     return ' '.join([getFFmpeg(), inFile(iFile), "-vn -acodec copy", outFile(oFile)])
+
+
+def removeAudioTrack(iFile, oFile):
+    """
+    removes the specified audio track; remember -map -0:a:2 means 0:1 track is removed!!
+    """
+    return ' '.join([getFFmpeg(), inFile(iFile), "-vcodec copy -acodec copy -map 0 -map -0:a:?", outFile(oFile)])
 
 
 def ffmpeg_mp3ToM4a_libfdk_aac():
@@ -243,6 +250,13 @@ def ffmpeg_extractAudio():
     filesList = getFileOrFolderList("")
     fileMap = {f: replaceFileExt(f, ".aac") for f in filesList}
     cmdList = [extractAudio(f1, f2) for f1, f2 in fileMap.items()]
+    return cmdList
+
+
+def ffmpeg_removeAudioTrack():
+    filesList = getFileOrFolderList("")
+    fileMap = {f: replaceFileExt(f, ".mkv") for f in filesList}
+    cmdList = [removeAudioTrack(f1, f2) for f1, f2 in fileMap.items()]
     return cmdList
 
 
