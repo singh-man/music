@@ -24,11 +24,11 @@ def userInput(x, *y):
 
 
 def getFileOrFolderList(ext):
-    fileOrFolder = input("Enter file or folder path: ")
+    fileOrFolder = input("Enter file(s) [multiple files can be space seperated] or folder path: ")
     if directoryUtils.isDir(fileOrFolder):
         filesList = directoryUtils.findFiles(fileOrFolder, ext)
     else:
-        filesList = [fileOrFolder]
+        filesList = fileOrFolder.split()
     return filesList
 
 
