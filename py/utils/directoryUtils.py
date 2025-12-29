@@ -20,10 +20,10 @@ def toRecurse():
     return choice.__contains__(recurse)
 
 
-def dumpCmdToScript(cmdList, toPath):
+def dumpCmdToScript(cmdList, toPath, fileName):
     # toPath = toPath.replace("/", ("/" if "linux" in sys.platform else "\\"))
     option = input("Should I write to file or execute them - yes, append, no, execute - !... (y/a/n/e) : ")
-    script = toPath + "ffmpeg" + (".sh" if "linux" in sys.platform else ".bat")
+    script = toPath + fileName
     options = {"y" : "w",
                 "a" : "a+"}
     if option in options:
