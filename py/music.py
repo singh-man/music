@@ -7,13 +7,19 @@ import ffmpeg.av as av
 import utils.directoryUtils as directoryUtils
 
 def finishNow():
-    directoryUtils.dumpCmdToScript(finalCmd, "./")
+    scriptName = "./ffmpeg" + (".sh" if "linux" in sys.platform else ".bat")
+    directoryUtils.dumpCmdToScript(finalCmd, "./", scriptName)
     sys.exit("Exiting the program")
 
 # [print(k, v.__name__) for k, v in options.items()]
 # options[int(selection)]()
 
 funcs = av.listAllUsefullFunctions()
+
+scriptName = "./tmp" + (".sh" if "linux" in sys.platform else ".bat")
+if directoryUtils.isFile(scriptName):
+    directoryUtils.removeFile(scriptName)
+
 funcs[100] = (finishNow.__name__, finishNow)
 finalCmd = []
 doit = True;
@@ -25,6 +31,10 @@ while doit:
     # options.get(selection) doesn't work
     cmd = funcs[int(selection)][1]()
     finalCmd.extend(cmd) if isinstance(cmd, list) else finalCmd.append(cmd)
+
+    scriptName = "./tmp" + (".sh" if "linux" in sys.platform else ".bat")
+    cmdsToWrite = cmd if isinstance(cmd, list) else [cmd]
+    directoryUtils.writeToFile(cmdsToWrite, scriptName, "a+")
         
     # map(lambda cmd:directoryUtils.execCmd(cmd), cmdList)
     
