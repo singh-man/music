@@ -35,6 +35,7 @@ while doit:
     scriptName = "./tmp" + (".sh" if "linux" in sys.platform else ".bat")
     cmdsToWrite = cmd if isinstance(cmd, list) else [cmd]
     directoryUtils.writeToFile(cmdsToWrite, scriptName, "a+")
+    print(f"Commands are also being dumped to: {scriptName}")
         
     # map(lambda cmd:directoryUtils.execCmd(cmd), cmdList)
     
