@@ -1,0 +1,61 @@
+[package]
+name = "music_tools"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = "1"
+chrono = "0.4"
+clap = { version = "4", features = ["derive"] }
+regex = "1"
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"] }
+serde_json = "1"
+walkdir = "2"
+
+[lib]
+name = "music_tools"
+path = "src/lib.rs"
+
+[[bin]]
+name = "main"
+path = "src/main.rs"
+
+[[bin]]
+name = "music"
+path = "src/bin/music.rs"
+
+[[bin]]
+name = "linux_kill"
+path = "src/bin/linux_kill.rs"
+
+[[bin]]
+name = "linux_port_kill"
+path = "src/bin/linux_port_kill.rs"
+
+[[bin]]
+name = "linux_mm_kill"
+path = "src/bin/linux_mm_kill.rs"
+
+[[bin]]
+name = "ocr_pdf"
+path = "src/bin/ocr_pdf.rs"
+
+[[bin]]
+name = "qib_wildfly"
+path = "src/bin/qib_wildfly.rs"
+
+[[bin]]
+name = "first"
+path = "src/bin/first.rs"
+
+[[bin]]
+name = "second"
+path = "src/bin/second.rs"
+
+[[bin]]
+name = "third"
+path = "src/bin/third.rs"
+
+[[bin]]
+name = "song_handler"
+path = "src/bin/song_handler.rs"
